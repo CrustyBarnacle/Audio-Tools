@@ -1,14 +1,14 @@
 # Audio-Tools
 
-Automated CD ripping with CDDB lookup and MP3 conversion.
+Modular toolkit for CD ripping and audio conversion.
 
 ## Features
 
 - Automated CD ripping using `abcde` with CDDB metadata lookup
 - Handles interactive prompts automatically (CDDB selection, resume sessions)
-- Converts ripped FLAC files to high-quality VBR MP3
-- Preserves metadata tags (title, artist, album, track number, date, genre)
-- Skips conversion if MP3 already exists
+- Standalone FLAC to MP3 conversion with metadata preservation
+- High-quality VBR MP3 encoding (lame -V 0)
+- Modular design - use individual tools or the full workflow
 
 ## Requirements
 
@@ -31,37 +31,55 @@ sudo pacman -S abcde expect flac lame
 
 ## Usage
 
+### Main Wrapper Script
+
+```bash
+./audio-tools.sh <command> [options]
+```
+
+| Command | Description |
+|---------|-------------|
+| `rip [device] [output_dir]` | Rip CD to FLAC |
+| `convert [directory]` | Convert FLAC files to MP3 |
+| `all [device] [output_dir]` | Rip CD and convert to MP3 |
+
+### Individual Scripts
+
+**Rip CD only:**
 ```bash
 ./rip_cd.sh [device] [output_dir]
 ```
 
-| Argument | Default | Description |
-|----------|---------|-------------|
-| `device` | `/dev/sr0` | CD drive device path |
-| `output_dir` | `.` | Directory for output files |
+**Convert FLAC to MP3 only:**
+```bash
+./flac2mp3.sh [directory]
+```
 
 ### Examples
 
 ```bash
-# Rip from default device to current directory
-./rip_cd.sh
+# Full workflow: rip CD and convert to MP3
+./audio-tools.sh all
 
-# Rip from specific device
-./rip_cd.sh /dev/cdrom
+# Rip CD only (no conversion)
+./audio-tools.sh rip /dev/sr0 ~/Music
 
-# Rip to specific output directory
-./rip_cd.sh /dev/sr0 ~/Music
+# Convert existing FLAC files to MP3
+./audio-tools.sh convert ~/Music
+
+# Or use individual scripts directly
+./rip_cd.sh /dev/cdrom ~/Music
+./flac2mp3.sh ~/Music
 ```
 
 ## How It Works
 
-1. **Ripping**: Runs `abcde` to rip the CD to FLAC format, automatically handling CDDB entry selection and other prompts
-2. **Conversion**: Finds the ripped FLAC files and converts them to MP3 using `lame -V 0` (highest quality VBR) while preserving all metadata tags
-
-Output is organized in `Artist/Album/` directory structure by `abcde`.
+- **rip_cd.sh**: Runs `abcde` with Expect automation to handle CDDB prompts. Outputs FLAC files in `Artist/Album/` structure.
+- **flac2mp3.sh**: Finds FLAC files (up to 3 directories deep), extracts metadata with `metaflac`, converts to MP3 with `lame -V 0`. Skips files where MP3 already exists.
+- **audio-tools.sh**: Wrapper that runs either or both tools.
 
 ## CDDB Selection
 
-- If only one CDDB entry exists, it's selected automatically
-- If multiple identical entries exist, the first is selected automatically
-- If multiple different entries exist, you'll be prompted to choose
+- Single CDDB entry: selected automatically
+- Multiple identical entries: first is selected automatically
+- Multiple different entries: prompts for user selection
