@@ -22,7 +22,7 @@ set device [lindex $argv 0]
 
 log_user 1
 
-spawn abcde -d $device
+spawn abcde -d "$device"
 
 proc check_duplicates {buffer} {
     # Parse CDDB entries from buffer, check if they're essentially duplicates

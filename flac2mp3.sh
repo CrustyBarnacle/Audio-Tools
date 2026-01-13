@@ -50,13 +50,13 @@ while IFS= read -r -d '' flac_file; do
 
     echo "Converting: $(basename "$flac_file")"
 
-    # Extract metadata from FLAC
-    TITLE=$(metaflac --show-tag=TITLE "$flac_file" 2>/dev/null | sed 's/TITLE=//' || echo "")
-    ARTIST=$(metaflac --show-tag=ARTIST "$flac_file" 2>/dev/null | sed 's/ARTIST=//' || echo "")
-    ALBUM=$(metaflac --show-tag=ALBUM "$flac_file" 2>/dev/null | sed 's/ALBUM=//' || echo "")
-    TRACKNUMBER=$(metaflac --show-tag=TRACKNUMBER "$flac_file" 2>/dev/null | sed 's/TRACKNUMBER=//' || echo "")
-    DATE=$(metaflac --show-tag=DATE "$flac_file" 2>/dev/null | sed 's/DATE=//' || echo "")
-    GENRE=$(metaflac --show-tag=GENRE "$flac_file" 2>/dev/null | sed 's/GENRE=//' || echo "")
+    # Extract metadata from FLAC (head -1 handles files with multiple tags of same type)
+    TITLE=$(metaflac --show-tag=TITLE "$flac_file" 2>/dev/null | head -1 | sed 's/TITLE=//' || echo "")
+    ARTIST=$(metaflac --show-tag=ARTIST "$flac_file" 2>/dev/null | head -1 | sed 's/ARTIST=//' || echo "")
+    ALBUM=$(metaflac --show-tag=ALBUM "$flac_file" 2>/dev/null | head -1 | sed 's/ALBUM=//' || echo "")
+    TRACKNUMBER=$(metaflac --show-tag=TRACKNUMBER "$flac_file" 2>/dev/null | head -1 | sed 's/TRACKNUMBER=//' || echo "")
+    DATE=$(metaflac --show-tag=DATE "$flac_file" 2>/dev/null | head -1 | sed 's/DATE=//' || echo "")
+    GENRE=$(metaflac --show-tag=GENRE "$flac_file" 2>/dev/null | head -1 | sed 's/GENRE=//' || echo "")
 
     # Build lame arguments (VBR quality 0 = highest quality)
     LAME_ARGS=(-V 0 --quiet)
