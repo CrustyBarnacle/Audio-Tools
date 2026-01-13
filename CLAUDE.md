@@ -50,3 +50,36 @@ Audio-Tools is a Bash-based toolkit for CD ripping and audio conversion. The pro
 - All scripts use `set -euo pipefail` for strict error handling
 - Temporary Expect script cleaned up via trap on EXIT
 - MP3 encoding uses VBR quality 0 (highest quality)
+
+## Development Workflow
+
+### Code Reviews
+When asked to review code, analyze for:
+- **Code duplication** - repeated patterns that could be consolidated
+- **Logic bugs** - edge cases, silent failures, incorrect handling
+- **Security issues** - command injection, unquoted variables, unsafe patterns
+
+Categorize findings by severity (high/medium/low) in a summary table.
+
+### Branching and Commits
+- Create feature/fix branches from `main` (e.g., `fix/medium-severity-issues`)
+- Make separate commits for each distinct fix
+- Use descriptive commit messages explaining the "why"
+- Merge to `main` with `--no-ff` to preserve branch history
+
+### Testing
+- Run smoke tests before finalizing changes: `./tests/smoke_test.sh`
+- All tests must pass before merging to main
+
+### Release Process
+1. Ensure all fixes are merged to `main`
+2. Sync `dev` branch: pull remote dev, merge main, push
+3. Run smoke tests on `dev`
+4. Create annotated tag: `git tag -a vX.Y.Z -m "message"`
+5. Push tag: `git push origin vX.Y.Z`
+6. Create GitHub release: `gh release create vX.Y.Z --title "..." --notes "..."`
+
+### Version Numbering
+- **Major (X)**: Breaking changes
+- **Minor (Y)**: New features, security fixes
+- **Patch (Z)**: Bug fixes
