@@ -79,7 +79,7 @@ while IFS= read -r -d '' flac_file; do
         echo "  -> Error converting: $(basename "$flac_file")"
     fi
 
-done < <(find . -maxdepth 3 -name "*.flac" -print0 2>/dev/null)
+done < <(find . -maxdepth 3 -name "*.flac" -print0)
 
 echo ""
 echo "=========================================="
