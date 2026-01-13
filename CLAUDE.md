@@ -68,8 +68,8 @@ Categorize findings by severity (high/medium/low) in a summary table.
 - Merge to `main` with `--no-ff` to preserve branch history
 
 ### Testing
-- Run smoke tests before finalizing changes: `./tests/smoke_test.sh`
-- All tests must pass before merging to main
+- Smoke tests are on the `dev` branch: `./tests/smoke_test.sh`
+- After syncing main to dev, run tests before creating a release
 
 ### Release Process
 1. Ensure all fixes are merged to `main`

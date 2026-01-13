@@ -42,13 +42,14 @@
 
 ## Testing
 
-Run smoke tests before submitting changes:
+Smoke tests are located on the `dev` branch. After syncing `main` to `dev`, run:
 
 ```bash
+git checkout dev
 ./tests/smoke_test.sh
 ```
 
-All tests must pass before merging to `main`.
+All tests must pass before creating a release.
 
 ## Code Standards
 
