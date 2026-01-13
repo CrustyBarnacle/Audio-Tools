@@ -12,7 +12,7 @@ OUTPUT_DIR="${2:-.}"
 
 # Create a temporary expect script for handling CDDB selection
 EXPECT_SCRIPT=$(mktemp)
-trap "rm -f '$EXPECT_SCRIPT'" EXIT
+trap 'rm -f "$EXPECT_SCRIPT"' EXIT
 
 cat > "$EXPECT_SCRIPT" << 'EXPECT_EOF'
 #!/usr/bin/expect -f
