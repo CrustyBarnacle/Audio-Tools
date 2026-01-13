@@ -12,7 +12,7 @@ OUTPUT_DIR="${2:-.}"
 
 # Create a temporary expect script for handling CDDB selection
 EXPECT_SCRIPT=$(mktemp)
-trap "rm -f '$EXPECT_SCRIPT'" EXIT
+trap 'rm -f "$EXPECT_SCRIPT"' EXIT
 
 cat > "$EXPECT_SCRIPT" << 'EXPECT_EOF'
 #!/usr/bin/expect -f
@@ -22,7 +22,7 @@ set device [lindex $argv 0]
 
 log_user 1
 
-spawn abcde -d $device
+spawn abcde -d "$device"
 
 proc check_duplicates {buffer} {
     # Parse CDDB entries from buffer, check if they're essentially duplicates
