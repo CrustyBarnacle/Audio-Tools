@@ -68,13 +68,14 @@ while IFS= read -r -d '' flac_file; do
     [[ -n "$DATE" ]] && LAME_ARGS+=(--ty "$DATE")
     [[ -n "$GENRE" ]] && LAME_ARGS+=(--tg "$GENRE")
 
-    # Convert FLAC to MP3
-    flac -cd "$flac_file" | lame "${LAME_ARGS[@]}" - "$mp3_file"
-
-    if [[ -f "$mp3_file" ]]; then
+    # Convert FLAC to MP3 (write to temp file first to avoid partial files on failure)
+    mp3_temp="${mp3_file}.tmp"
+    if flac -cd "$flac_file" | lame "${LAME_ARGS[@]}" - "$mp3_temp" && [[ -f "$mp3_temp" ]]; then
+        mv "$mp3_temp" "$mp3_file"
         ((CONVERT_COUNT++))
         echo "  -> Created: $(basename "$mp3_file")"
     else
+        rm -f "$mp3_temp"
         echo "  -> Error converting: $(basename "$flac_file")"
     fi
 
