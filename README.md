@@ -26,7 +26,7 @@ sudo dnf install abcde expect flac lame
 
 **Arch Linux:**
 ```bash
-sudo pacman -S abcde expect flac lame
+sudo pacman -S --needed abcde expect flac lame
 ```
 
 ## Usage
